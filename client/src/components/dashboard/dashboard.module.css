@@ -75,12 +75,14 @@
   /* styles for sidebar */
   .sidebar {
     width: 260px;
-    height: 100vh;
     background-color: #d0e7fb;
     color: #000;
     padding: 1.5rem 1rem;
     display: flex;
     flex-direction: column;
+    height: 100vh;
+    position: sticky;
+    top: 0;
   }
   
   .logoContainer {
@@ -125,8 +127,7 @@
   .navLink:hover {
     background-color: rgba(0, 123, 255, 0.1);
   }
-  
-  .activeNav .navLink {
+  .activeNav {
     background-color: #c4defb;
     color: #007bff;
     font-weight: 600;
@@ -205,7 +206,7 @@
     border-radius: 8px;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.04);
     margin-bottom: 1rem;
-  }
+  }  
   /* Adjust userCard layout for tight and aligned */
   .userCard {
     background-color: transparent;
@@ -268,13 +269,14 @@
 
     /* styles for dashboardlayout */
 
-    .backdrop {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(0, 0, 0, 0.3);
-      z-index: 999; /* one less than sidebar (1000) */
-    }
+   .backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1050; /* ABOVE SIDEBAR Z-INDEX */
+}
+
     
