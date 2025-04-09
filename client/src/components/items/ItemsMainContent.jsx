@@ -1,74 +1,84 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Items.module.css';
+import axios from 'axios';
 
-const items = [
-  {
-    name: 'Gas Kitting',
-    id: 'G-7893',
-    type: 'IE Project Items',
-    amount: '1 pcs',
-    price: 'HQ',
-    description: 'Activated',
-    img: '/leftPanel.jpg',
-  },
-  {
-    name: 'Condet',
-    id: 'Co-7898',
-    type: 'IE Project Items',
-    amount: '3 pcs',
-    price: 'HQ',
-    description: 'Activated',
-    img: '/leftPanel.jpg',
-  },
-  ...Array(8).fill({
-    name: 'Condet',
-    id: 'G-7893',
-    type: 'IE Project Items',
-    amount: '5 pcs',
-    price: 'HQ',
-    description: 'Activated',
-    img: '/leftPanel.jpg',
-  }),
-];
+export default function ItemsMainContent() {
+  const [items, setItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
-const ItemsMainContent = () => {
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const res = await axios.get('http://localhost:5000/api/items', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Sort newest to oldest by purchase_date
+        const sorted = res.data.sort((a, b) => {
+          const idA = parseInt(a.item_id, 10);
+          const idB = parseInt(b.item_id, 10);
+          return idB - idA; // Descending order: 010 → 001
+        });        
+        setItems(sorted);
+      } catch (err) {
+        console.error('Error fetching items:', err);
+      }
+    };
+
+    fetchItems();
+  }, []);
+
+  const totalPages = Math.ceil(items.length / pageSize);
+  const paginatedItems = items.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+  const formatMonthYear = (dateStr) => {
+    const date = new Date(dateStr);
+    return `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
+  };
+
   return (
     <div className={styles.cardWrapper}>
       <h5 className="fw-semibold">All Items</h5>
       <p className="text-muted small">Items detail Information</p>
 
       <div className={`card mt-3 p-3 ${styles.cardBody}`}>
-        {/* Table */}
         <div className="table-responsive">
           <table className="table table-hover align-middle">
             <thead className="table-light">
               <tr>
                 <th>Item name</th>
                 <th>Image</th>
-                <th>id</th>
+                <th>ID</th>
                 <th>Type</th>
-                <th>Amount</th>
+                <th>Status</th>
                 <th>Price</th>
-                <th>Description</th>
+                <th>Purchase Date</th>
               </tr>
             </thead>
             <tbody>
-              {items.map((item, idx) => (
+              {paginatedItems.map((item, idx) => (
                 <tr key={idx}>
                   <td>{item.name}</td>
                   <td>
                     <img
-                      src={item.img}
-                      className={styles.itemImage}
+                      src={item.image || '/leftPanel.jpg'}
                       alt={item.name}
+                      className={styles.itemImage}
+                      width="40"
+                      height="40"
+                      style={{ objectFit: 'cover', borderRadius: '4px' }}
                     />
                   </td>
-                  <td>{item.id}</td>
+                  <td>{item.item_id}</td>
                   <td>{item.type}</td>
-                  <td>{item.amount}</td>
+                  <td>{item.status}</td>
                   <td>{item.price}</td>
-                  <td>{item.description}</td>
+                  <td>{formatMonthYear(item.purchase_date)}</td>
                 </tr>
               ))}
             </tbody>
@@ -76,42 +86,43 @@ const ItemsMainContent = () => {
         </div>
 
         {/* Pagination */}
-        <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
-          <div>
-            Showing <strong>1 to 10</strong> out of <strong>40</strong> records
+        {items.length > 10 && (
+          <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+            <div>
+              Showing <strong>{(currentPage - 1) * pageSize + 1}</strong> to <strong>{Math.min(currentPage * pageSize, items.length)}</strong> out of <strong>{items.length}</strong> records
+            </div>
+            <div className="d-flex align-items-center gap-2">
+              <select
+                className="form-select form-select-sm"
+                style={{ width: '70px' }}
+                value={pageSize}
+                onChange={(e) => {
+                  setPageSize(parseInt(e.target.value));
+                  setCurrentPage(1);
+                }}
+              >
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+              </select>
+              <nav>
+                <ul className="pagination pagination-sm mb-0">
+                  <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                    <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>‹</button>
+                  </li>
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <li key={i} className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
+                      <button className="page-link" onClick={() => setCurrentPage(i + 1)}>{i + 1}</button>
+                    </li>
+                  ))}
+                  <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                    <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>›</button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
           </div>
-          <div className="d-flex align-items-center gap-2">
-            <select
-              className="form-select form-select-sm"
-              style={{ width: '70px' }}
-            >
-              <option>10</option>
-              <option>20</option>
-            </select>
-            <nav>
-              <ul className="pagination pagination-sm mb-0">
-                <li className="page-item disabled">
-                  <a className="page-link">‹</a>
-                </li>
-                <li className="page-item active">
-                  <a className="page-link">1</a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link">2</a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link">3</a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link">›</a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
-};
-
-export default ItemsMainContent;
+}

@@ -1,41 +1,43 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Create.module.css';
 import AddItemModal from './AddItemModal';
 import { FiSearch, FiPlusCircle, FiFilter } from 'react-icons/fi';
-
-const items = [
-  {
-    name: 'Gas Kitting',
-    id: 'G-7893',
-    type: 'IE Project Items',
-    amount: '1 pcs',
-    price: 'HQ',
-    description: 'Activated',
-    img: '/leftPanel.jpg',
-  },
-  {
-    name: 'Condet',
-    id: 'Co-7898',
-    type: 'IE Project Items',
-    amount: '3 pcs',
-    price: 'HQ',
-    description: 'Activated',
-    img: '/leftPanel.jpg',
-  },
-  ...Array(8).fill({
-    name: 'Condet',
-    id: 'G-7893',
-    type: 'IE Project Items',
-    amount: '5 pcs',
-    price: 'HQ',
-    description: 'Activated',
-    img: '/leftPanel.jpg',
-  }),
-];
+import axios from 'axios';
 
 const CreateMainContent = () => {
-  const [modalOpen, setModalOpen] = useState(false); // ✅ Added modal state
+  const [items, setItems] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const res = await axios.get('http://localhost:5000/api/items', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const sorted = res.data.sort((a, b) => {
+          const idA = parseInt(a.item_id, 10);
+          const idB = parseInt(b.item_id, 10);
+          return idB - idA;
+        });
+
+        setItems(sorted);
+      } catch (err) {
+        console.error('Error fetching items:', err);
+      }
+    };
+
+    fetchItems();
+  }, []);
+
+  const totalPages = Math.ceil(items.length / pageSize);
+  const paginatedItems = items.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
     <div className={styles.cardWrapper}>
@@ -68,7 +70,7 @@ const CreateMainContent = () => {
             <button
               className="btn btn-primary d-flex align-items-center px-3"
               style={{ borderRadius: '8px' }}
-              onClick={() => setModalOpen(true)} 
+              onClick={() => setModalOpen(true)}
             >
               <FiPlusCircle className="me-2" size={18} />
               Add Item
@@ -86,27 +88,34 @@ const CreateMainContent = () => {
           <table className="table table-hover align-middle">
             <thead className="table-light">
               <tr>
-                <th><input type="checkbox" /></th>
                 <th>Item name</th>
                 <th>Image</th>
-                <th>id</th>
+                <th>ID</th>
                 <th>Type</th>
-                <th>Amount</th>
+                <th>Status</th>
                 <th>Price</th>
-                <th>Description</th>
+                <th>Purchase Date</th>
               </tr>
             </thead>
             <tbody>
-              {items.map((item, idx) => (
+              {paginatedItems.map((item, idx) => (
                 <tr key={idx}>
-                  <td><input type="checkbox" /></td>
                   <td>{item.name}</td>
-                  <td><img src={item.img} className={styles.itemImage} alt={item.name} /></td>
-                  <td>{item.id}</td>
+                  <td>
+                    <img
+                      src={item.image || '/leftPanel.jpg'}
+                      className={styles.itemImage}
+                      alt={item.name}
+                      width="40"
+                      height="40"
+                      style={{ objectFit: 'cover', borderRadius: '4px' }}
+                    />
+                  </td>
+                  <td>{item.item_id}</td>
                   <td>{item.type}</td>
-                  <td>{item.amount}</td>
+                  <td>{item.status}</td>
                   <td>{item.price}</td>
-                  <td>{item.description}</td>
+                  <td>{new Date(item.purchase_date).toLocaleString('default', { month: 'long', year: 'numeric' })}</td>
                 </tr>
               ))}
             </tbody>
@@ -114,26 +123,44 @@ const CreateMainContent = () => {
         </div>
 
         {/* Pagination */}
-        <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
-          <div>
-            Showing <strong>1 to 10</strong> out of <strong>40</strong> records
+        {items.length > 10 && (
+          <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+            <div>
+              Showing <strong>{(currentPage - 1) * pageSize + 1}</strong> to{' '}
+              <strong>{Math.min(currentPage * pageSize, items.length)}</strong> out of{' '}
+              <strong>{items.length}</strong> records
+            </div>
+            <div className="d-flex align-items-center gap-2">
+              <select
+                className="form-select form-select-sm"
+                style={{ width: '70px' }}
+                value={pageSize}
+                onChange={(e) => {
+                  setPageSize(parseInt(e.target.value));
+                  setCurrentPage(1);
+                }}
+              >
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+              </select>
+              <nav>
+                <ul className="pagination pagination-sm mb-0">
+                  <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                    <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>‹</button>
+                  </li>
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <li key={i} className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
+                      <button className="page-link" onClick={() => setCurrentPage(i + 1)}>{i + 1}</button>
+                    </li>
+                  ))}
+                  <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                    <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>›</button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
           </div>
-          <div className="d-flex align-items-center gap-2">
-            <select className="form-select form-select-sm" style={{ width: '70px' }}>
-              <option>10</option>
-              <option>20</option>
-            </select>
-            <nav>
-              <ul className="pagination pagination-sm mb-0">
-                <li className="page-item disabled"><a className="page-link">‹</a></li>
-                <li className="page-item active"><a className="page-link">1</a></li>
-                <li className="page-item"><a className="page-link">2</a></li>
-                <li className="page-item"><a className="page-link">3</a></li>
-                <li className="page-item"><a className="page-link">›</a></li>
-              </ul>
-            </nav>
-          </div>
-        </div>
+        )}
 
         {/* Modal */}
         <AddItemModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
