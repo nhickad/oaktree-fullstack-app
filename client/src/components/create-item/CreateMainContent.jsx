@@ -10,6 +10,10 @@ const CreateMainContent = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
+  const [statusFilter, setStatusFilter] = useState('');
+  const [typeFilter, setTypeFilter] = useState('');
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -36,8 +40,23 @@ const CreateMainContent = () => {
     fetchItems();
   }, []);
 
-  const totalPages = Math.ceil(items.length / pageSize);
-  const paginatedItems = items.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const filteredItems = items.filter((item) => {
+    const keywordMatch =
+      item.name.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+      item.type.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+      item.item_id.toLowerCase().includes(searchKeyword.toLowerCase());
+
+    const statusMatch = statusFilter ? item.status === statusFilter : true;
+    const typeMatch = typeFilter ? item.type === typeFilter : true;
+
+    return keywordMatch && statusMatch && typeMatch;
+  });
+
+  const totalPages = Math.ceil(filteredItems.length / pageSize);
+  const paginatedItems = filteredItems.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   return (
     <div className={styles.cardWrapper}>
@@ -60,6 +79,11 @@ const CreateMainContent = () => {
             />
             <input
               type="text"
+              value={searchKeyword}
+              onChange={(e) => {
+                setSearchKeyword(e.target.value);
+                setCurrentPage(1);
+              }}
               className="form-control ps-5"
               placeholder="Search Item"
               style={{ borderRadius: '8px' }}
@@ -76,12 +100,58 @@ const CreateMainContent = () => {
               Add Item
             </button>
 
-            <button className="btn btn-light border d-flex align-items-center px-3" style={{ borderRadius: '8px' }}>
+            <button
+              className="btn btn-light border d-flex align-items-center px-3"
+              style={{ borderRadius: '8px' }}
+              onClick={() => setShowFilters((prev) => !prev)}
+            >
               <FiFilter className="me-2" size={18} />
               Filter
             </button>
           </div>
         </div>
+
+        {/* Filter Dropdown */}
+        {showFilters && (
+          <div className="d-flex gap-3 mb-3 flex-wrap px-2">
+            <div>
+              <label className="form-label small mb-1">Filter by Status</label>
+              <select
+                className="form-select"
+                value={statusFilter}
+                onChange={(e) => {
+                  setStatusFilter(e.target.value);
+                  setCurrentPage(1);
+                }}
+              >
+                <option value="">All</option>
+                <option value="In Use">In Use</option>
+                <option value="In Stock">In Stock</option>
+                <option value="Out of Stock">Out of Stock</option>
+                <option value="Disposed">Disposed</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="form-label small mb-1">Filter by Type</label>
+              <select
+                className="form-select"
+                value={typeFilter}
+                onChange={(e) => {
+                  setTypeFilter(e.target.value);
+                  setCurrentPage(1);
+                }}
+              >
+                <option value="">All</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Equipment">Equipment</option>
+                <option value="Software Licenses">Software Licenses</option>
+                <option value="IE Project Items">IE Project Items</option>
+              </select>
+            </div>
+          </div>
+        )}
 
         {/* Table */}
         <div className="table-responsive">
@@ -123,12 +193,12 @@ const CreateMainContent = () => {
         </div>
 
         {/* Pagination */}
-        {items.length > 10 && (
+        {filteredItems.length > 10 && (
           <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
             <div>
               Showing <strong>{(currentPage - 1) * pageSize + 1}</strong> to{' '}
-              <strong>{Math.min(currentPage * pageSize, items.length)}</strong> out of{' '}
-              <strong>{items.length}</strong> records
+              <strong>{Math.min(currentPage * pageSize, filteredItems.length)}</strong> out of{' '}
+              <strong>{filteredItems.length}</strong> records
             </div>
             <div className="d-flex align-items-center gap-2">
               <select
