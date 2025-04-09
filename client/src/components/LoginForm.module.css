@@ -1,0 +1,215 @@
+.bodyPadding {
+  padding: 2rem;
+}
+
+.container {
+  display: flex;
+  height: 90vh;
+  width: 90vw;
+  overflow: hidden;
+  background-color: #f9fbfd;
+}
+
+
+.leftPanel {
+  position: relative;
+  flex: 1.5;
+  background-color: #f0f6fd;
+  border-radius: 20px;
+  margin: 20px 10px 20px 20px;
+  overflow: hidden;
+  display: none;
+}
+
+.abstractImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  opacity: 0.9;
+  transition: transform 0.5s ease;
+}
+
+.abstractImage:hover {
+  transform: scale(1.05);
+}
+
+
+@media (min-width: 1024px) {
+  .leftPanel {
+    display: block;
+  }
+}
+
+.rightPanel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: white;
+}
+
+.formBox {
+  width: 100%;
+  max-width: 400px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.logo img {
+  width: 45px;
+  height: 45px;
+  margin-right: 12px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.heading {
+  font-size: 28px;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+
+.greeting {
+  font-size: 15px;
+  margin-bottom: 1.5rem;
+  color: #777;
+}
+
+.input {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.input:focus {
+  border-color: #0070f3;
+}
+
+
+.linkRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 14px;
+}
+
+.registerLink,
+.forgotLink {
+  font-weight: 500;
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.registerLink:hover,
+.forgotLink:hover {
+  text-decoration: underline;
+}
+
+
+
+.button {
+  width: 100%;
+  padding: 14px;
+  background-color: #0070f3;
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #005bd1;
+}
+
+@media (min-width: 1024px) {
+  .leftPanel {
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .leftPanel {
+    display: none;
+  }
+
+  .rightPanel {
+    width: 100%;
+    padding: 2rem 1rem;
+  }
+
+  .formBox {
+    max-width: 90%;
+  }
+}
+
+.backLink {
+  font-size: 14px;
+  color: #0070f3;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  text-decoration: underline;
+  color: #005bd1;
+}
+
+
+.passwordWrapper {
+  position: relative;
+}
+
+.passwordWrapper input {
+  width: 100%;
+  padding: 14px;
+  padding-right: 44px; /* give room for eye icon */
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  margin-bottom: 1rem;
+  transition: border-color 0.3s;
+}
+
+.passwordWrapper input:focus {
+  border-color: #0070f3;
+}
+
+.eyeIcon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #777;
+  font-size: 18px;
+}

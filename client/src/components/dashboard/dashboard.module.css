@@ -1,0 +1,95 @@
+/* styles/dashboard.module.css */
+
+.cardBox {
+    border-radius: 10px;
+    background-color: white;
+  }
+  
+  .tableHeader th {
+    color: #888;
+    font-weight: 500;
+  }
+  
+  .itemImage {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  
+  .viewAll {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  
+
+  /* styles/dashboard.module.css */
+
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    background-color: #d0e7fb;
+    color: #000;
+  }
+  
+  .logoImage {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .logoText {
+    font-size: 1.1rem;
+  }
+  
+  .navLink {
+    color: #000;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1rem;
+  }
+  
+  .navLink:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    border-radius: 8px;
+  }
+  
+  .activeNav .nav-link {
+    background-color: #c4defb;
+    border-radius: 8px;
+    font-weight: bold;
+  }
+  
+  .headerContainer {
+    background-color: #fff;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  
+  .iconButton {
+    width: 36px;
+    height: 36px;
+    background-color: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .userCard {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 4px 10px;
+    border: 1px solid #f2f2f2;
+  }
+  
+  .userImage {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
