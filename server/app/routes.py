@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from db import get_db_connection
 from passlib.hash import bcrypt
 import jwt, datetime
+import sqlite3
 
 auth_bp = Blueprint('auth', __name__)
 SECRET_KEY = 'supersecretkey'
@@ -93,34 +94,47 @@ def create_item():
     except ValueError:
         return jsonify({'error': 'Invalid price format'}), 400
 
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute('''
+            INSERT INTO items (
+                type, name, image, status, price,
+                purchase_date, description, fixed_asset
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (
+            data['type'],
+            data['name'],
+            data.get('image', ''),
+            data['status'],
+            price,
+            data['purchase_date'],
+            data.get('description', ''),
+            int(data.get('fixed_asset', False))
+        ))
+        conn.commit()
+
+        new_id = cursor.lastrowid
+        padded_id = f"{new_id:03}"
+
+        cursor.execute('UPDATE items SET item_id = ? WHERE id = ?', (padded_id, new_id))
+        conn.commit()
+        conn.close()  # ✅ Always close it
+
+        return jsonify({'message': 'Item added', 'item_id': padded_id}), 201
+
+    except sqlite3.OperationalError as e:
+        return jsonify({'error': 'Database is locked. Please try again.'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@auth_bp.route('/api/items', methods=['GET'])
+def get_items():
     conn = get_db_connection()
-    cursor = conn.cursor()
-
-    # Insert item without item_id for now
-    cursor.execute('''
-        INSERT INTO items (
-            type, name, image, status, price,
-            purchase_date, description, fixed_asset
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (
-        data['type'],
-        data['name'],
-        data.get('image', ''),
-        data['status'],
-        price,
-        data['purchase_date'],
-        data.get('description', ''),
-        int(data.get('fixed_asset', False))
-    ))
-    conn.commit()
-
-    # Get the auto-generated ID, pad it
-    new_id = cursor.lastrowid
-    padded_id = f"{new_id:03}"  # ➜ '001', '002', etc.
-
-    # Update row with generated item_id
-    cursor.execute('UPDATE items SET item_id = ? WHERE id = ?', (padded_id, new_id))
-    conn.commit()
+    items = conn.execute('SELECT * FROM items').fetchall()
     conn.close()
 
-    return jsonify({'message': 'Item added', 'item_id': padded_id}), 201
+    result = [dict(item) for item in items]
+    return jsonify(result)

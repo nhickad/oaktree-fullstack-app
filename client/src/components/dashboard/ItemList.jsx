@@ -1,22 +1,28 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './dashboard.module.css';
-
-const items = [
-  { name: 'Gas Kitting', store: '22 House Store', amount: '1 pcs', img: '/leftPanel.jpg' },
-  { name: 'Condet', store: 'HQ Main Store', amount: '3 pcs', img: '/leftPanel.jpg' },
-  { name: 'Condet', store: 'HQ Main Store', amount: '5 pcs', img: '/leftPanel.jpg' },
-  { name: 'Condet', store: 'HQ Main Store', amount: '5 pcs', img: '/leftPanel.jpg' },
-];
+import Link from 'next/link';
 
 const ItemList = () => {
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/items')
+      .then(res => res.json())
+      .then(data => {
+        const sorted = [...data].sort((a, b) => b.id - a.id);
+        setItems(sorted);
+      })
+      .catch(console.error);
+  }, []);
+
   return (
     <div className="col-md-6 mb-4">
       <div className={`card shadow-sm ${styles.cardBox}`}>
         <div className="card-body">
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h5 className="mb-0 fw-semibold">Item List</h5>
-            <a href="#" className={styles.viewAll}>View All</a>
+            <Link href="/items" className={styles.viewAll}>View All</Link>
           </div>
 
           <div className="table-responsive">
@@ -24,26 +30,23 @@ const ItemList = () => {
               <thead className={styles.tableHeader}>
                 <tr>
                   <th>Item Name</th>
-                  <th>Image</th>
-                  <th>Store</th>
-                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Type</th>
+                  <th>Price</th>
                 </tr>
               </thead>
               <tbody>
-                {items.map((item, idx) => (
-                  <tr key={idx}>
-                    <td>{item.name}</td>
-                    <td>
-                      <img src={item.img} className={styles.itemImage} alt={item.name} />
-                    </td>
-                    <td>{item.store}</td>
-                    <td>{item.amount}</td>
-                  </tr>
-                ))}
-              </tbody>
+                  {items.slice(0, 6).map((item, idx) => (
+                    <tr key={idx}>
+                      <td>{item.name}</td>
+                      <td>{item.status}</td>
+                      <td>{item.type}</td>
+                      <td>₱ {Number(item.price).toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
             </table>
           </div>
-
         </div>
       </div>
     </div>

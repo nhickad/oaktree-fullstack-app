@@ -7,6 +7,8 @@ import AssetList from './AssetList';
 import styles from './dashboard.module.css';
 import TotalItems from './TotalItems';
 import TotalAssets from './TotalAssets';
+import InStockItems from './InStockItems';
+import MaintenanceStats from './MaintenanceStats';
 
 const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -43,6 +45,8 @@ const DashboardLayout = () => {
             <div className="d-flex flex-wrap justify-content-center gap-4 mt-3">
               <TotalItems />
               <TotalAssets />
+              <InStockItems />
+              <MaintenanceStats />
             </div>
           </div>
 

@@ -70,6 +70,18 @@
     margin-bottom: 0.5rem;
   }
 
+  .iconYellow {
+    font-size: 1.5rem;
+    color: #f4b400;
+    margin-bottom: 0.5rem;
+  }
+  
+  .iconRed {
+    font-size: 1.5rem;
+    color: #ea4335;
+    margin-bottom: 0.5rem;
+  }
+  
   
 
   /* styles for sidebar */

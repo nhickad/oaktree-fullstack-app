@@ -3,35 +3,35 @@ import React, { useEffect, useState } from 'react';
 import styles from './dashboard.module.css';
 import { FaClipboardList, FaRegFileAlt } from 'react-icons/fa';
 
-const TotalAssets = () => {
-  const [total, setTotal] = useState(0);
-  const [disposed, setDisposed] = useState(0);
+const InStockItems = () => {
+  const [inStock, setInStock] = useState(0);
+  const [outOfStock, setOutOfStock] = useState(0);
 
   useEffect(() => {
     fetch('http://localhost:5000/api/items')
       .then(res => res.json())
       .then(data => {
-        const assets = data.filter(item => item.fixed_asset === 1);
-        setTotal(assets.length);
-        setDisposed(assets.filter(a => a.status === 'Disposed').length);
-      });
+        setInStock(data.filter(item => item.status === 'In Stock').length);
+        setOutOfStock(data.filter(item => item.status === 'Out of Stock').length);
+      })
+      .catch(console.error);
   }, []);
 
   return (
     <div className={styles.totalCardWrapper}>
       <div className={styles.totalCard}>
-        <h6 className="fw-semibold mb-4">Total assets</h6>
+        <h6 className="fw-semibold mb-4">Stock Availability</h6>
         <div className="d-flex justify-content-between">
           <div className="d-flex flex-column align-items-center">
             <FaClipboardList className={styles.iconBlue} />
-            <div className="fw-bold fs-5">{total}</div>
-            <div className="text-muted small">Total Assets</div>
+            <div className="fw-bold fs-5">{inStock}</div>
+            <div className="text-muted small">In Stock Items</div>
           </div>
           <div className={styles.divider}></div>
           <div className="d-flex flex-column align-items-center">
             <FaRegFileAlt className={styles.iconPurple} />
-            <div className="fw-bold fs-5">{disposed}</div>
-            <div className="text-muted small">Disposed Assets</div>
+            <div className="fw-bold fs-5">{outOfStock}</div>
+            <div className="text-muted small">Out of Stock</div>
           </div>
         </div>
       </div>
@@ -39,4 +39,4 @@ const TotalAssets = () => {
   );
 };
 
-export default TotalAssets;
+export default InStockItems;

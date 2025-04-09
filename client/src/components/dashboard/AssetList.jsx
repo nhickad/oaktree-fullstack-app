@@ -1,15 +1,22 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './dashboard.module.css';
 
-const assets = [
-  { name: 'Gas Kitting', store: '22 House Store', amount: '1 pcs', img: '/leftPanel.jpg' },
-  { name: 'Condet', store: 'HQ Main Store', amount: '3 pcs', img: '/leftPanel.jpg' },
-  { name: 'Condet', store: 'HQ Main Store', amount: '5 pcs', img: '/leftPanel.jpg' },
-  { name: 'Condet', store: 'HQ Main Store', amount: '5 pcs', img: '/leftPanel.jpg' },
-];
-
 const AssetList = () => {
+  const [assets, setAssets] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/items')
+      .then(res => res.json())
+      .then(data => {
+        const filtered = data
+          .filter(item => item.fixed_asset === 1)
+          .sort((a, b) => b.id - a.id);
+        setAssets(filtered);
+      })
+      .catch(console.error);
+  }, []);
+
   return (
     <div className="col-md-6 mb-4">
       <div className={`card shadow-sm ${styles.cardBox}`}>
@@ -24,26 +31,23 @@ const AssetList = () => {
               <thead className={styles.tableHeader}>
                 <tr>
                   <th>Asset Name</th>
-                  <th>Image</th>
-                  <th>Store</th>
-                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Type</th>
+                  <th>Price</th>
                 </tr>
               </thead>
               <tbody>
-                {assets.map((asset, idx) => (
+                {assets.slice(0, 6).map((asset, idx) => (
                   <tr key={idx}>
                     <td>{asset.name}</td>
-                    <td>
-                      <img src={asset.img} className={styles.itemImage} alt={asset.name} />
-                    </td>
-                    <td>{asset.store}</td>
-                    <td>{asset.amount}</td>
+                    <td>{asset.status}</td>
+                    <td>{asset.type}</td>
+                    <td>₱ {Number(asset.price).toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-
         </div>
       </div>
     </div>
