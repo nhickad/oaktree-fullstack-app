@@ -1,0 +1,97 @@
+.wrapper {
+  max-width: 100%;
+  padding: 1.5rem 2rem;
+}
+
+.detailCard {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.3s ease;
+}
+
+.detailCard:hover {
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+}
+
+.imageWrapper {
+  width: 500px;
+  height: 380px;
+  background-color: #006EC433;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 1.5rem;
+}
+
+.image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.infoBox {
+  flex: 1;
+  min-width: 300px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  padding-top: 0.25rem;
+}
+
+.infoBox h5 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.infoBox p {
+  margin-bottom: 0.7rem;
+  color: #222;
+  font-weight: 500;
+}
+
+
+.actionBtn {
+  min-width: 90px;
+}
+
+
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 1rem;
+  }
+
+  .imageWrapper {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .detailCard {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .infoBox {
+    font-size: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .infoBox h5 {
+    font-size: 1.25rem;
+  }
+  
+  .actionBtn {
+    width: 100%;
+  }
+}
+
+.detailCard {
+  align-items: center;
+  gap: 32px;
+}

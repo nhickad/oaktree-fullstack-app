@@ -138,3 +138,14 @@ def get_items():
 
     result = [dict(item) for item in items]
     return jsonify(result)
+
+@auth_bp.route('/api/items/<item_id>', methods=['GET'])
+def get_item(item_id):
+    conn = get_db_connection()
+    item = conn.execute('SELECT * FROM items WHERE item_id = ?', (item_id,)).fetchone()
+    conn.close()
+
+    if not item:
+        return jsonify({'error': 'Item not found'}), 404
+
+    return jsonify(dict(item))

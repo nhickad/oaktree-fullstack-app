@@ -61,31 +61,35 @@ export default function ItemsMainContent() {
               </tr>
             </thead>
             <tbody>
-              {paginatedItems.map((item, idx) => (
-                <tr key={idx}>
-                  <td>{item.name}</td>
-                  <td>
-                    <img
-                      src={item.image || '/leftPanel.jpg'}
-                      alt={item.name}
-                      className={styles.itemImage}
-                      width="40"
-                      height="40"
-                      style={{ objectFit: 'cover', borderRadius: '4px' }}
-                    />
-                  </td>
-                  <td>{item.item_id}</td>
-                  <td>{item.type}</td>
-                  <td>{item.status}</td>
-                  <td>{item.price}</td>
-                  <td>{formatMonthYear(item.purchase_date)}</td>
-                </tr>
-              ))}
-            </tbody>
+                {paginatedItems.map((item, idx) => (
+                  <tr
+                    key={idx}
+                    onClick={() => window.location.href = `/items/${item.item_id}`}
+                    style={{ cursor: 'pointer' }}
+                    className="table-row-hover"
+                  >
+                    <td >{item.name}</td>
+                    <td>
+                      <img
+                        src={item.image || '/leftPanel.jpg'}
+                        alt={item.name}
+                        className={styles.itemImage}
+                        width="40"
+                        height="40"
+                        style={{ objectFit: 'cover', borderRadius: '4px' }}
+                      />
+                    </td>
+                    <td>{item.item_id}</td>
+                    <td>{item.type}</td>
+                    <td>{item.status}</td>
+                    <td>{item.price}</td>
+                    <td>{formatMonthYear(item.purchase_date)}</td>
+                  </tr>
+                ))}
+              </tbody>
           </table>
         </div>
 
-        {/* Pagination */}
         {items.length > 10 && (
           <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
             <div>

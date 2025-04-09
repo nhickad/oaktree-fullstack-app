@@ -35,3 +35,16 @@
   }
 }
 
+.table-row-hover:hover {
+  background-color: #f1f5f9; /* light gray-blue */
+  transition: background-color 0.2s ease-in-out;
+}
+
+.headerWrapper {
+  background-color: #fff;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.04);
+  margin-bottom: 1rem;
+}
+
