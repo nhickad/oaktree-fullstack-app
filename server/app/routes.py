@@ -75,3 +75,52 @@ def protected():
         return jsonify({'error': 'Token expired'}), 401
     except jwt.InvalidTokenError:
         return jsonify({'error': 'Invalid token'}), 401
+
+
+@auth_bp.route('/api/items', methods=['POST'])
+def create_item():
+    data = request.json
+
+    required_fields = ['type', 'name', 'status', 'price', 'purchase_date']
+    for field in required_fields:
+        if field not in data or not data[field]:
+            return jsonify({'error': f'{field} is required'}), 400
+
+    try:
+        price = float(data['price'])
+        if price < 0:
+            return jsonify({'error': 'Price must be a positive number'}), 400
+    except ValueError:
+        return jsonify({'error': 'Invalid price format'}), 400
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Insert item without item_id for now
+    cursor.execute('''
+        INSERT INTO items (
+            type, name, image, status, price,
+            purchase_date, description, fixed_asset
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (
+        data['type'],
+        data['name'],
+        data.get('image', ''),
+        data['status'],
+        price,
+        data['purchase_date'],
+        data.get('description', ''),
+        int(data.get('fixed_asset', False))
+    ))
+    conn.commit()
+
+    # Get the auto-generated ID, pad it
+    new_id = cursor.lastrowid
+    padded_id = f"{new_id:03}"  # ➜ '001', '002', etc.
+
+    # Update row with generated item_id
+    cursor.execute('UPDATE items SET item_id = ? WHERE id = ?', (padded_id, new_id))
+    conn.commit()
+    conn.close()
+
+    return jsonify({'message': 'Item added', 'item_id': padded_id}), 201

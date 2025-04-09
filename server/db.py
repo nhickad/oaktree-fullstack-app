@@ -17,6 +17,21 @@ def init_db():
             password TEXT NOT NULL
         )
     ''')
-    
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS items (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            item_id TEXT UNIQUE, 
+            type TEXT NOT NULL,
+            name TEXT NOT NULL,
+            image TEXT,
+            status TEXT NOT NULL,
+            price REAL NOT NULL CHECK (price >= 0),
+            purchase_date TEXT NOT NULL,
+            description TEXT,
+            fixed_asset INTEGER DEFAULT 0
+        )
+    ''')
+
     conn.commit()
     conn.close()
