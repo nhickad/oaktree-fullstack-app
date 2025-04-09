@@ -1,7 +1,8 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Create.module.css';
-import { FiSearch, FiPlusCircle, FiFilter, FiPackage } from 'react-icons/fi';
+import AddItemModal from './AddItemModal';
+import { FiSearch, FiPlusCircle, FiFilter } from 'react-icons/fi';
 
 const items = [
   {
@@ -34,6 +35,8 @@ const items = [
 ];
 
 const CreateMainContent = () => {
+  const [modalOpen, setModalOpen] = useState(false); // ✅ Added modal state
+
   return (
     <div className={styles.cardWrapper}>
       <h5 className="fw-semibold">Create Items</h5>
@@ -42,28 +45,31 @@ const CreateMainContent = () => {
       <div className={`card mt-3 p-3 ${styles.cardBody}`}>
         {/* Top Controls */}
         <div className="d-flex justify-content-between align-items-center flex-wrap gap-3 px-2 mb-3">
-        <div className="position-relative" style={{ maxWidth: '300px' }}>
-        <FiSearch
-          style={{
-            position: 'absolute',
-            top: '35%',
-            left: '12px',
-            transform: 'translateY(-50%)',
-            color: '#888',
-            fontSize: '1.1rem',
-          }}
-        />
-        <input
-          type="text"
-          className="form-control ps-5"
-          placeholder="Search Item"
-          style={{ borderRadius: '8px' }}
-        />
-      </div>
-
+          <div className="position-relative" style={{ maxWidth: '300px' }}>
+            <FiSearch
+              style={{
+                position: 'absolute',
+                top: '35%',
+                left: '12px',
+                transform: 'translateY(-50%)',
+                color: '#888',
+                fontSize: '1.1rem',
+              }}
+            />
+            <input
+              type="text"
+              className="form-control ps-5"
+              placeholder="Search Item"
+              style={{ borderRadius: '8px' }}
+            />
+          </div>
 
           <div className="d-flex gap-2 align-items-center">
-            <button className="btn btn-primary d-flex align-items-center px-3" style={{ borderRadius: '8px' }}>
+            <button
+              className="btn btn-primary d-flex align-items-center px-3"
+              style={{ borderRadius: '8px' }}
+              onClick={() => setModalOpen(true)} 
+            >
               <FiPlusCircle className="me-2" size={18} />
               Add Item
             </button>
@@ -128,6 +134,9 @@ const CreateMainContent = () => {
             </nav>
           </div>
         </div>
+
+        {/* Modal */}
+        <AddItemModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
       </div>
     </div>
   );

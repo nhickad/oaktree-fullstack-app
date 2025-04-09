@@ -1,0 +1,83 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 1050;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .modalContent {
+    background-color: #fff;
+    width: 750px;
+    height: 100%;
+    padding: 2rem 2.5rem;
+    overflow-y: auto;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    animation: slideIn 0.3s ease-in-out;
+  }
+  
+  /* Smooth open animation */
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0%);
+      opacity: 1;
+    }
+  }
+  
+  /* Form section spacing */
+  .modalContent .form-label {
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #333;
+  }
+  
+  .modalContent input.form-control,
+  .modalContent textarea.form-control,
+  .modalContent select.form-select {
+    border-radius: 8px;
+    font-size: 0.9rem;
+  }
+  
+  .modalContent textarea {
+    resize: vertical;
+  }
+  
+  /* Icon inside file/date input */
+  .input-group-text {
+    background-color: #f9f9f9;
+    border-left: 0;
+  }
+  
+  /* Buttons */
+  .modalContent .btn-light {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0.45rem 1.2rem;
+  }
+  
+  .modalContent .btn-primary {
+    border-radius: 8px;
+    padding: 0.45rem 1.5rem;
+    font-weight: 500;
+    background-color: #007bff;
+    border: none;
+  }
+  
+  /* Responsive max height scroll */
+  @media (max-height: 768px) {
+    .modalContent {
+      padding: 1.5rem;
+    }
+  }
+  
