@@ -1,36 +1,93 @@
-/* styles/dashboard.module.css */
 
-.cardBox {
+  /* styles for itemlist and assets list */
+  .cardBox {
     border-radius: 10px;
     background-color: white;
-  }
-  
-  .tableHeader th {
-    color: #888;
-    font-weight: 500;
-  }
-  
-  .itemImage {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 5px;
-  }
-  
-  .viewAll {
-    color: #007bff;
-    text-decoration: none;
-    font-size: 0.9rem;
+    padding: 1.5rem;
+    height: 100%;
   }
   
 
-  /* styles/dashboard.module.css */
+.tableHeader th {
+  color: #888;
+  font-weight: 500;
+}
 
-.sidebar {
-    width: 240px;
+.itemImage {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.viewAll {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Optional: Shrink font on mobile */
+@media (max-width: 768px) {
+  .table th,
+  .table td {
+    font-size: 0.875rem;
+  }
+}
+
+  /* styles for total list and assets list */
+
+  .totalCard {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.03);
+    flex: 1;
+    min-width: 280px;
+    max-width: 420px;
+  }
+
+  .totalCardWrapper {
+    flex: 1 1 320px;
+    max-width: 400px;
+  }
+  
+  .divider {
+    width: 1px;
+    background-color: #eee;
+    margin: 0 1.5rem;
+  }
+
+  .iconBlue {
+    font-size: 1.5rem;
+    color: #43aaf5;
+    margin-bottom: 0.5rem;
+  }
+
+  .iconPurple {
+    font-size: 1.5rem;
+    color: #9d7ce2;
+    margin-bottom: 0.5rem;
+  }
+
+  
+
+  /* styles for sidebar */
+  .sidebar {
+    width: 260px;
     height: 100vh;
     background-color: #d0e7fb;
     color: #000;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .logoContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
   }
   
   .logoImage {
@@ -40,56 +97,184 @@
   
   .logoText {
     font-size: 1.1rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+  }
+  
+  .navList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .navItem {
+    margin-bottom: 0.75rem;
   }
   
   .navLink {
-    color: #000;
-    font-weight: 500;
     display: flex;
     align-items: center;
-    padding: 0.6rem 1rem;
+    text-decoration: none;
+    color: #000;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    transition: background-color 0.2s ease-in-out;
   }
   
   .navLink:hover {
     background-color: rgba(0, 123, 255, 0.1);
-    border-radius: 8px;
   }
   
-  .activeNav .nav-link {
+  .activeNav .navLink {
     background-color: #c4defb;
-    border-radius: 8px;
-    font-weight: bold;
+    color: #007bff;
+    font-weight: 600;
   }
   
-  .headerContainer {
+  .icon {
+    margin-right: 0.75rem;
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    color: #6c757d; /* light gray for inactive icons */
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .iconActive {
+    color: #007bff; /* blue for active icons */
+  }
+  
+
+  /* RESPONSIVE SIDEBAR STYLES */
+
+  .hamburgerBtn {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.4rem;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+  }
+  
+  @media (max-width: 768px) {
+    .hamburgerBtn {
+      display: block;
+    }
+  }
+
+    .hamburger svg {
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+/* Override for sidebar on mobile */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    height: 100vh;
+    transition: left 0.3s ease-in-out;
+    z-index: 1000;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .sidebar.closed {
+    left: -260px;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
+
+  /* styles for sidebar */
+
+
+  /* styles for header */
+
+  .headerWrapper {
     background-color: #fff;
     padding: 1rem 1.5rem;
     border-radius: 8px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.04);
     margin-bottom: 1rem;
   }
-  
-  .iconButton {
-    width: 36px;
-    height: 36px;
-    background-color: #f2f2f2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  
+  /* Adjust userCard layout for tight and aligned */
   .userCard {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .userIcon {
+    font-size: 36px;
+    color: #444;
+  }
+  
+  .accountWrapper {
+    position: relative;
+  }
+  
+  .dropdownMenu {
+    position: absolute;
+    right: 0;
+    top: 110%;
     background-color: #fff;
-    border-radius: 10px;
-    padding: 4px 10px;
     border: 1px solid #f2f2f2;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    width: 120px;
+    z-index: 10;
   }
   
-  .userImage {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
+  .dropdownItem {
+    padding: 10px;
+    font-size: 0.9rem;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
   }
   
+  .dropdownItem:hover {
+    background-color: #f8f9fa;
+  }
+  
+
+/* 👇 Improve responsiveness */
+@media (max-width: 768px) {
+  .headerWrapper {
+    padding: 1rem;
+  }
+
+  .accountWrapper {
+    margin-top: 0;
+  }
+
+  .userCard {
+    flex-shrink: 0;
+  }
+}
+  
+    /* styles for header */
+
+    /* styles for dashboardlayout */
+
+    .backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.3);
+      z-index: 999; /* one less than sidebar (1000) */
+    }
+    
