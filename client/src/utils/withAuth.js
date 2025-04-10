@@ -19,7 +19,7 @@ const withAuth = (WrappedComponent) => {
           // verify token with backend
           await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/protected`, {
             headers: { Authorization: `Bearer ${token}` },
-          });
+          });          
         } catch (err) {
           localStorage.removeItem('token'); // invalid/expired token
           router.replace('/login');
