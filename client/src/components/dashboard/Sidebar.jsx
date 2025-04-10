@@ -24,7 +24,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   return (
     <div className={`${styles.sidebar} ${isOpen ? styles.open : styles.closed}`}>
-      <div className={styles.logoContainer}>
+        <div className={styles.logoContainer}>
         <Image src={logoInventory} alt="Inventory Logo" className={styles.logoImage} />
         <span className={styles.logoText}>OAKtree Inventory</span>
       </div>
@@ -37,20 +37,18 @@ const Sidebar = ({ isOpen, onClose }) => {
             <li
               key={item.label}
               className={`${styles.navItem} ${isActive ? styles.activeNav : ''}`}
+              onClick={() => {
+                if (window.innerWidth <= 768) onClose();
+              }}
             >
-              <Link
-                href={item.path}
-                className={styles.navLink}
-                onClick={() => {
-                  if (window.innerWidth <= 768) onClose();
-                }}
-              >
+              <Link href={item.path} className={styles.navLink}>
                 <span className={`${styles.icon} ${isActive ? styles.iconActive : ''}`}>
                   {item.icon}
                 </span>
                 {item.label}
               </Link>
             </li>
+
           );
         })}
       </ul>

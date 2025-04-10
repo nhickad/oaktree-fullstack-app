@@ -23,7 +23,6 @@ const AssetList = () => {
         <div className="card-body">
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h5 className="mb-0 fw-semibold">Asset List</h5>
-            <a href="#" className={styles.viewAll}>View All</a>
           </div>
 
           <div className="table-responsive">

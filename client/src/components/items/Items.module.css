@@ -48,3 +48,25 @@
   margin-bottom: 1rem;
 }
 
+
+/* Sidebar backdrop fix (mobile) */
+@media (max-width: 768px) {
+  .backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1040;
+  }
+}
+
+/* Optional if not yet defined: */
+.headerWrapper {
+  background-color: #fff;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.04);
+  margin-bottom: 1rem;
+}
