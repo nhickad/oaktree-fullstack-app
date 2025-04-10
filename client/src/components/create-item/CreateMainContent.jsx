@@ -169,7 +169,12 @@ const CreateMainContent = () => {
             </thead>
             <tbody>
               {paginatedItems.map((item, idx) => (
-                <tr key={idx}>
+                <tr
+                  key={idx}
+                  onClick={() => window.location.href = `/items/${item.item_id}`}
+                  style={{ cursor: 'pointer' }}
+                  className="table-row-hover"
+                >
                   <td>{item.name}</td>
                   <td>
                     <img
@@ -189,6 +194,7 @@ const CreateMainContent = () => {
                 </tr>
               ))}
             </tbody>
+
           </table>
         </div>
 
