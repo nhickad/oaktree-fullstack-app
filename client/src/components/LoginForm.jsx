@@ -106,7 +106,6 @@ export default function LoginForm() {
 
           <div className={styles.linkRow}>
           <a href="/register" className={styles.registerLink}>Register User</a>
-          <a href="#" className={styles.forgotLink}>Forgot Password?</a>
           </div>
 
 
