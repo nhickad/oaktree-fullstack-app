@@ -65,7 +65,7 @@ export default function LoginForm() {
     <div className={styles.container}>
       <div className={styles.leftPanel}>
       <img
-          src="/leftPanel.jpg"
+          src="/testimage.png"
           alt="Abstract Art"
           className={styles.abstractImage}
         />
