@@ -151,6 +151,59 @@ def get_item(item_id):
 
     return jsonify(dict(item))
 
+# PUT /api/items/<id>: Updates an existing item by ID.
+@auth_bp.route('/api/items/<item_id>', methods=['PUT'])
+def update_item(item_id):
+    data = request.json
+
+    required_fields = ['type', 'name', 'status', 'price', 'purchase_date']
+    for field in required_fields:
+        if field not in data or not data[field]:
+            return jsonify({'error': f'{field} is required'}), 400
+
+    try:
+        price = float(data['price'])
+        if price < 0:
+            return jsonify({'error': 'Price must be a positive number'}), 400
+    except ValueError:
+        return jsonify({'error': 'Invalid price format'}), 400
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute('SELECT * FROM items WHERE item_id = ?', (item_id,))
+        existing = cursor.fetchone()
+
+        if not existing:
+            conn.close()
+            return jsonify({'error': 'Item not found'}), 404
+
+        cursor.execute('''
+            UPDATE items
+            SET type = ?, name = ?, image = ?, status = ?, price = ?,
+                purchase_date = ?, description = ?, fixed_asset = ?
+            WHERE item_id = ?
+        ''', (
+            data['type'],
+            data['name'],
+            data.get('image', ''),
+            data['status'],
+            price,
+            data['purchase_date'],
+            data.get('description', ''),
+            int(data.get('fixed_asset', False)),
+            item_id
+        ))
+
+        conn.commit()
+        conn.close()
+        return jsonify({'message': 'Item updated successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 # DELETE /api/items/<id>: Deletes an item by ID.
 @auth_bp.route('/api/items/<item_id>', methods=['DELETE'])
 def delete_item(item_id):
