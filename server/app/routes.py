@@ -1,7 +1,8 @@
 from flask import Blueprint, request, jsonify
 from db import get_db_connection
 from passlib.hash import bcrypt
-import jwt, datetime
+from jose import jwt, JWTError, ExpiredSignatureError  # ✅ FIXED
+import datetime
 import sqlite3
 
 auth_bp = Blueprint('auth', __name__)
