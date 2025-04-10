@@ -8,7 +8,7 @@ const TotalAssets = () => {
   const [disposed, setDisposed] = useState(0);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/items')
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/items`)
       .then(res => res.json())
       .then(data => {
         const assets = data.filter(item => item.fixed_asset === 1);

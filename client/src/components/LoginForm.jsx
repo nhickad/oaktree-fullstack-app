@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './LoginForm.module.css';
 import Image from 'next/image';
-import logo from '../assets/logo-inventory.png';
+import logo from '../assets/logo-inventory.png';     
 import { useRouter } from 'next/router';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
@@ -45,7 +45,7 @@ export default function LoginForm() {
     }
   
     try {
-      const res = await axios.post('http://localhost:5000/login', {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
         username,
         password
       });

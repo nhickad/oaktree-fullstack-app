@@ -12,7 +12,7 @@ export default function ItemsMainContent() {
     const fetchItems = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:5000/api/items', {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/items`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
