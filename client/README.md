@@ -1,40 +1,166 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Oaktree Inventory – Full Stack App
 
-## Getting Started
+A full-stack inventory management system built as part of a Junior Full-Stack Developer exam. It features full CRUD operations for inventory items, user registration & login, JWT-based authentication, route protection, and responsive design.
 
-First, run the development server:
+---
+
+## 🔧 Technologies Used
+
+| Layer     | Stack                                      |
+|-----------|---------------------------------------------|
+| Frontend  | Next.js, React, Bootstrap, React Toastify   |
+| Backend   | Flask (Python), SQLite, JWT, bcrypt         |
+| Database  | SQLite3                                     |
+| Auth      | Token-based (JWT)                           |
+
+---
+
+## 🚀 Setup Instructions
+
+> Clone this project and follow the steps below to run both **backend** and **frontend**.
+
+---
+
+### 1️⃣ Clone the Repo
+
+```bash
+git clone https://github.com/nhickad/oaktree-fullstack-app.git
+cd oaktree-fullstack-app
+
+```
+
+## Backend Setup (Flask API)
+
+```bash
+cd server
+
+
+```
+
+## Create virtual environment:
+
+```bash
+# Windows
+python -m venv venv
+venv\Scripts\activate
+
+# macOS/Linux
+python3 -m venv venv
+source venv/bin/activate
+
+```
+
+## Create virtual environment:
+
+```bash
+pip install -r requirements.txt
+
+```
+
+## Option B: Manual install
+
+```bash
+pip install flask flask-cors passlib pyjwt
+
+```
+
+## Option B: Manual install
+
+```bash
+python -c "from db import init_db; init_db()"
+
+```
+
+## Option B: Manual install
+
+```bash
+python run.py
+
+```
+
+Frontend Setup (Next.js)
+
+
+## Navigate to the client folder:
+
+```bash
+cd ../client
+
+```
+
+## Install Node.js dependencies:
+
+```bash
+npm install
+
+```
+
+## Start the frontend dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+- User Registration & Login with JWT
+- Protected routes (backend + frontend)
+- CRUD functionality for Inventory Items
+- Real-time Feedback via React Toastify
+- Error Handling & Validation
+- Mobile Responsive UI
+- Token invalidation on logout
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## Approach
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+### Backend
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Flask REST API using Blueprints
+- JWT used for authentication (generated on login, validated on each protected route)
+- SQLite used for data persistence
+- Passwords are hashed using bcrypt
+- Endpoints check for token validity and respond accordingly
+- Validation included on fields like price, name, status
 
-## Learn More
+### Frontend
 
-To learn more about Next.js, take a look at the following resources:
+- Built with Next.js Pages Router
+- Used axios for API interaction and React Toastify for user feedback
+- Protected pages with a withAuth HOC to verify token presence and validity
+- Form validation handled on the client side
+- Layout built using Bootstrap grid and components
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+## Assumptions
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- One user type — no role-based access (Admin/User)
+- JWT secret is hardcoded in Flask backend (`SECRET_KEY`)
+- SQLite database is stored locally as `database.db`
+- No image upload feature — only URL string accepted for item image
+- Token is stored in localStorage (not cookies)
+- Toast notifications are used for all success/error events
+- User will always be redirected to `/login` when not authenticated
+- Project is intended for local development and demonstration purposes
 
-## Deploy on Vercel
+## API Endpoints
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Method | Endpoint         | Description                  |
+|--------|------------------|------------------------------|
+| POST   | /register         | Register new user            |
+| POST   | /login            | Login & receive JWT          |
+| GET    | /protected        | Validate JWT and get user    |
+| GET    | /api/items        | Get all items                |
+| GET    | /api/items/:id    | Get item by ID               |
+| POST   | /api/items        | Create item                  |
+| PUT    | /api/items/:id    | Update item by ID            |
+| DELETE | /api/items/:id    | Delete item by ID            |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+## Example Test Routes
+
+- `/login` → Login form
+- `/register` → User registration
+- `/dashboard` → Main inventory dashboard
+- `/items` → Items list view
+- `/create-item` → New item form
+- `/items/:id` → Single item view/edit/delete
+
