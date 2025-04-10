@@ -9,7 +9,7 @@ import {
   FaBoxOpen,
   FaBars,
 } from 'react-icons/fa';
-import logoInventory from '../../assets/logo-Inventory.png';
+import logoInventory from '../../assets/logo.png';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 

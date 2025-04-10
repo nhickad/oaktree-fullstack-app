@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import styles from './LoginForm.module.css';
 import Image from 'next/image';
-import logo from '../assets/logo-inventory.png';
+import logo from '../assets/logo.png';
 import axios from 'axios';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { toast } from 'react-toastify'; // ✅ Import toast
