@@ -2,12 +2,14 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import ItemDetailLayout from '../../components/items/ItemDetailLayout';
 import styles from './ItemDetail.module.css';
+import { toast } from 'react-toastify';
 
 export default function ItemDetailPage() {
   const router = useRouter();
   const { id } = router.query;
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -28,17 +30,26 @@ export default function ItemDetailPage() {
     fetchItem();
   }, [id]);
 
-  const handleEdit = () => {
-    router.push(`/items/edit/${id}`);
-  };
-
-  const handleDelete = () => {
-    if (confirm('Are you sure you want to delete this item?')) {
-      fetch(`http://localhost:5000/api/items/${id}`, {
+  const handleDelete = async () => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/items/${id}`, {
         method: 'DELETE',
-      })
-        .then(() => router.push('/items'))
-        .catch((err) => console.error('Error deleting:', err));
+      });
+
+      if (res.ok) {
+        toast.success('Item deleted successfully.');
+        setTimeout(() => {
+          router.push('/items');
+        }, 2000); // wait a bit so user sees toast
+      } else {
+        const data = await res.json();
+        toast.error(data.error || 'Deletion failed.');
+      }
+    } catch (err) {
+      console.error('Error deleting:', err);
+      toast.error('Something went wrong.');
+    } finally {
+      setShowConfirm(false);
     }
   };
 
@@ -62,15 +73,16 @@ export default function ItemDetailPage() {
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h4 className="fw-bold mb-0">Item Description</h4>
           <div className="d-flex gap-2">
-            <button className={`btn btn-outline-primary ${styles.actionBtn}`} onClick={handleEdit}>
+            <button className={`btn btn-outline-primary ${styles.actionBtn}`} onClick={() => router.push(`/items/edit/${id}`)}>
               Edit
             </button>
-            <button className={`btn btn-outline-danger ${styles.actionBtn}`} onClick={handleDelete}>
+            <button className={`btn btn-outline-danger ${styles.actionBtn}`} onClick={() => setShowConfirm(true)}>
               Delete
             </button>
           </div>
         </div>
 
+        {/* Detail Card */}
         <div className={`d-flex flex-column flex-md-row gap-4 ${styles.detailCard}`}>
           <div className={styles.imageWrapper}>
             {item.image ? (
@@ -90,6 +102,26 @@ export default function ItemDetailPage() {
             <p><strong>Asset:</strong> {item.fixed_asset ? 'Yes' : 'No'}</p>
           </div>
         </div>
+
+        {/* Delete Confirmation Popup */}
+        {showConfirm && (
+          <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Confirm Deletion</h5>
+                </div>
+                <div className="modal-body">
+                  <p>Are you sure you want to delete this item?</p>
+                </div>
+                <div className="modal-footer">
+                  <button className="btn btn-secondary" onClick={() => setShowConfirm(false)}>Cancel</button>
+                  <button className="btn btn-danger" onClick={handleDelete}>Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </ItemDetailLayout>
   );

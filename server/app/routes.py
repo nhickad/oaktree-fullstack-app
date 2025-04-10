@@ -77,7 +77,7 @@ def protected():
     except jwt.InvalidTokenError:
         return jsonify({'error': 'Invalid token'}), 401
 
-
+#POST /api/items: Accepts a JSON payload to create a new item.
 @auth_bp.route('/api/items', methods=['POST'])
 def create_item():
     data = request.json
@@ -129,7 +129,7 @@ def create_item():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
+#GET /api/items: Returns a list of items in JSON format.
 @auth_bp.route('/api/items', methods=['GET'])
 def get_items():
     conn = get_db_connection()
@@ -139,6 +139,7 @@ def get_items():
     result = [dict(item) for item in items]
     return jsonify(result)
 
+#GET /api/items/<id>: Returns the details of a specific item by ID.
 @auth_bp.route('/api/items/<item_id>', methods=['GET'])
 def get_item(item_id):
     conn = get_db_connection()
@@ -149,3 +150,26 @@ def get_item(item_id):
         return jsonify({'error': 'Item not found'}), 404
 
     return jsonify(dict(item))
+
+# DELETE /api/items/<id>: Deletes an item by ID.
+@auth_bp.route('/api/items/<item_id>', methods=['DELETE'])
+def delete_item(item_id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('SELECT * FROM items WHERE item_id = ?', (item_id,))
+        item = cursor.fetchone()
+        
+        if not item:
+            conn.close()
+            return jsonify({'error': 'Item not found'}), 404
+
+        cursor.execute('DELETE FROM items WHERE item_id = ?', (item_id,))
+        conn.commit()
+        conn.close()
+
+        return jsonify({'message': f'Item {item_id} deleted successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
