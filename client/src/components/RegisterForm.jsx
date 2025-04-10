@@ -33,7 +33,7 @@ export default function RegisterForm() {
     }
   
     try {
-      const res = await axios.post('http://localhost:5000/register', {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
         name, email, password
       });
   
