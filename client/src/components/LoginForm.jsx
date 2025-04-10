@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './LoginForm.module.css';
 import Image from 'next/image';
-import logo from '../assets/logo-inventory.png';
+import logo from '../assets/logo-inventory.png';     
 import { useRouter } from 'next/router';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
