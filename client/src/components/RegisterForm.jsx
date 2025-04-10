@@ -1,9 +1,11 @@
+'use client';
 import { useState } from 'react';
 import styles from './LoginForm.module.css';
 import Image from 'next/image';
 import logo from '../assets/logo-inventory.png';
 import axios from 'axios';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { toast } from 'react-toastify'; // ✅ Import toast
 
 export default function RegisterForm() {
   const [name, setName] = useState('');
@@ -19,26 +21,41 @@ export default function RegisterForm() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
+  
     if (!name || !email || !password || !confirmPassword) {
       setError("All fields required");
       return;
     }
-
+  
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
-
+  
     try {
       const res = await axios.post('http://localhost:5000/register', {
         name, email, password
       });
-      alert("User registered!");
+  
+      toast.success('User registered successfully!');
+      setName('');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+      setError('');
+  
+      // ✅ Wait 2s before redirecting to login
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 2000);
+  
     } catch (err) {
-      setError("Registration failed");
+      console.error(err);
+      const message = err.response?.data?.error || "Registration failed";
+      toast.error(`🚫 ${message}`);
     }
   };
+  
 
   return (
     <div className={styles.bodyPadding}>
