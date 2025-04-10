@@ -24,7 +24,7 @@ function ItemDetailPage() {
 
     const fetchItem = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/items/${id}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/items/${id}`);
         const data = await res.json();
         setItem(data);
         setForm(data); // for editing
@@ -49,7 +49,7 @@ function ItemDetailPage() {
 
   const handleUpdate = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/items/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/items/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
