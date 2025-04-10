@@ -17,7 +17,7 @@ const withAuth = (WrappedComponent) => {
 
         try {
           // verify token with backend
-          await axios.get('http://localhost:5000/protected', {
+          await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/protected`, {
             headers: { Authorization: `Bearer ${token}` },
           });
         } catch (err) {
