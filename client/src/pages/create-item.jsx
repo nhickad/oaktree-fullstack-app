@@ -1,5 +1,8 @@
 import CreateLayout from '../components/create-item/CreateLayout';
+import withAuth from '../utils/withAuth';
 
-export default function ItemsPage() {
+function CreateItemPage() {
   return <CreateLayout />;
 }
+
+export default withAuth(CreateItemPage);

@@ -3,13 +3,14 @@ import { useEffect, useState } from 'react';
 import ItemDetailLayout from '../../components/items/ItemDetailLayout';
 import styles from './ItemDetail.module.css';
 import { toast } from 'react-toastify';
+import withAuth from '../../utils/withAuth';
 
 const statusOptions = [
   'In Use', 'In Stock', 'Reserved', 'Under Maintenance', 'Out of Stock',
   'Disposed', 'Damaged', 'Lost', 'Returned', 'Transferred', 'Pending Approval', 'For Disposal'
 ];
 
-export default function ItemDetailPage() {
+function ItemDetailPage() {
   const router = useRouter();
   const { id } = router.query;
   const [item, setItem] = useState(null);
@@ -191,3 +192,5 @@ export default function ItemDetailPage() {
     </ItemDetailLayout>
   );
 }
+
+export default withAuth(ItemDetailPage);

@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { FaUserCircle, FaBars } from 'react-icons/fa';
+import { FaUserCircle, FaBars, FaSignOutAlt } from 'react-icons/fa'; 
 import styles from './dashboard.module.css';
 import axios from 'axios';
 
@@ -70,7 +70,8 @@ const Header = ({ onToggleSidebar }) => {
           {showDropdown && (
             <div className={styles.dropdownMenu}>
               <div className={styles.dropdownItem} onClick={handleLogout}>
-                Logout
+                <FaSignOutAlt size={16} />
+                Log out
               </div>
             </div>
           )}
